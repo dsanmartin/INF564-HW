@@ -1,2 +1,2 @@
-# INF564-HW
-Advanced Algorithm Design Homeworks
+# INF-564: Advanced Algorithm Design
+## Homeworks
