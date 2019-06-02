@@ -5,6 +5,7 @@
 
 void readInput(Node **head);
 void showDanger(Danger *fligths, int n);
-void saveOutpu(const char *filename);
+void showWarningFlights(Point p1, Point p2);
+void saveOutput(const char *filename);
 
 #endif

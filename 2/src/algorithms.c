@@ -81,6 +81,7 @@ void min(Point *p, double *M, int n) {
 	printf("Min: %lf, p1: (%lf, %lf), p2: (%lf, %lf)\n", min, p[p1].x, p[p1].y, p[p2].x, p[p2].y);
 }
 
+/* Compute distance between planes. n^2 elements */
 void warningFlights(Danger *flights, Point *p, int n) {
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < n; j++) {
@@ -92,6 +93,19 @@ void warningFlights(Danger *flights, Point *p, int n) {
 				flights[j * n + i].p1 = p[i];
 				flights[j * n + i].p2 = p[j];
 			} 
+		}
+	}
+}
+
+/* Compute distance between planes, without repeated information. (n^2 - n)/2 elements */
+void warningFlightsOPT(Danger *flights, Point *p, int n) {
+	int k = 0;
+	for (int i = 1; i < n; i++) {
+		for (int j = 0; j < i; j++) {
+			flights[k].distance = euclidean(p[i], p[j]);
+			flights[k].p1 = p[i];
+			flights[k].p2 = p[j];
+			k++;
 		}
 	}
 }

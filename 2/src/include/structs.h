@@ -1,26 +1,26 @@
 #ifndef STRUCTS_H
 #define STRUCTS_H
 
-struct point {
+typedef struct point {
 	double x;
 	double y;
-} typedef Point;
+} Point;
 
-struct flights {
+typedef struct flights {
 	int id;
 	int n;
 	Point *points;
-} typedef Flights;
+} Flights;
 
 typedef struct node {
 	Flights data;
 	struct node* next;
 } Node;
 
-struct danger {
+typedef struct danger {
 	double distance;
 	Point p1;
 	Point p2;
-} typedef Danger;
+} Danger;
 
 #endif

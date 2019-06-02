@@ -13,5 +13,6 @@ void distances(Point *points, int n);
 void distanceMatrix(Point *p, double *M, int n);
 void min(Point *p, double *M, int n);
 void warningFlights(Danger *flights, Point *p, int n);
+void warningFlightsOPT(Danger *flights, Point *p, int n);
 
 #endif

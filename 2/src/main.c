@@ -13,16 +13,20 @@ int main(int argc, char *argv[]) {
 	/* To compute time for each approach */
 	clock_t start, end;
 
-	readInput(&head); // Read stdin 
+	readInput(&head); // Read stdin and fill list
 	
 	/* Iterate over data */
 	Node *flight = head;
 	while (flight != NULL) {
 		Point *p = flight->data.points; // Flights' location
 		int n = flight->data.n; // Number of flights
+		int no = (n * n - n) / 2; // Number of flights (opt)
+		printf("N: %d, NO: %d\n", n, no);
 		double *M = (double *) malloc(n * n * sizeof(double)); // Distance Matrix
 		Danger *ds = (Danger *) malloc(n * n * sizeof(Danger)); // Danger structure
-		Danger *tmp = (Danger *) malloc(n * n * sizeof(Danger)); // Danger temp structure
+		// Danger *tmp = (Danger *) malloc(n * n * sizeof(Danger)); // Danger temp structure
+		Danger *dso = (Danger *) malloc(no * sizeof(Danger)); // Danger structure Opt
+		// Danger *tmpo = (Danger *) malloc(no * sizeof(Danger)); // Danger structure Opt
 
 		printf("Altitude %d\n", flight->data.id);
 		
@@ -42,7 +46,17 @@ int main(int argc, char *argv[]) {
 		warningFlights(ds, p, n); // Compute distances
 		selectionSort(ds, n * n);
 		end = clock();
-		printf("Min: %lf, p1: (%lf, %lf), p2: (%lf, %lf)\n", ds[0].distance, ds[0].p1.x, ds[0].p1.y, ds[0].p2.x, ds[0].p2.y);
+		printf("Min: %lf\n", ds[0].distance);
+		showWarningFlights(ds[0].p1, ds[0].p2);
+		printf("Time: %lf\n", ((double) (end - start)) / CLOCKS_PER_SEC);
+
+		printf("Selection Sort OPT\n"); 
+		start = clock();
+		warningFlightsOPT(dso, p, n); // Compute distances
+		selectionSort(dso, no);
+		end = clock();
+		printf("Min: %lf\n", dso[0].distance);
+		showWarningFlights(dso[0].p1, dso[0].p2);
 		printf("Time: %lf\n", ((double) (end - start)) / CLOCKS_PER_SEC);
 
 		printf("Bubble Sort\n");
@@ -50,16 +64,26 @@ int main(int argc, char *argv[]) {
 		warningFlights(ds, p, n); // Compute distances
 		bubbleSort(ds, n * n);
 		end = clock();
-		printf("Min: %lf, p1: (%lf, %lf), p2: (%lf, %lf)\n", ds[0].distance, ds[0].p1.x, ds[0].p1.y, ds[0].p2.x, ds[0].p2.y);
+		printf("Min: %lf\n", ds[0].distance);
+		showWarningFlights(ds[0].p1, ds[0].p2);
 		printf("Time: %lf\n", ((double) (end - start)) / CLOCKS_PER_SEC);
 
-		printf("Merge Sort\n");
+		printf("Bubble Sort OPT\n");
 		start = clock();
-		warningFlights(ds, p, n); // Compute distances
-		mergeSort(ds, tmp, 0, n * n);
+		warningFlightsOPT(dso, p, n); // Compute distances
+		bubbleSort(dso, no);
 		end = clock();
-		printf("Min: %lf, p1: (%lf, %lf), p2: (%lf, %lf)\n", ds[0].distance, ds[0].p1.x, ds[0].p1.y, ds[0].p2.x, ds[0].p2.y);
+		printf("Min: %lf\n", dso[0].distance);
+		showWarningFlights(dso[0].p1, dso[0].p2);
 		printf("Time: %lf\n", ((double) (end - start)) / CLOCKS_PER_SEC);
+
+		// printf("Merge Sort\n");
+		// start = clock();
+		// warningFlights(ds, p, n); // Compute distances
+		// mergeSort(ds, tmp, 0, n * n);
+		// end = clock();
+		// printf("Min: %lf, p1: (%lf, %lf), p2: (%lf, %lf)\n", ds[0].distance, ds[0].p1.x, ds[0].p1.y, ds[0].p2.x, ds[0].p2.y);
+		// printf("Time: %lf\n", ((double) (end - start)) / CLOCKS_PER_SEC);
 		
 		flight = flight->next; // Next flights at same altitude
 
@@ -67,6 +91,7 @@ int main(int argc, char *argv[]) {
 		free(p);
 		free(M);
 		free(ds);
+		free(dso);
 
 		printf("\n");
 	}
