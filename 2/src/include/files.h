@@ -3,7 +3,8 @@
 
 #include "structs.h"
 
-void readInput(Node **head, int *n_flights);
+void readInput(Node **head);
+void showDanger(Danger *fligths, int n);
 void saveOutpu(const char *filename);
 
 #endif

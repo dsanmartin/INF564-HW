@@ -42,9 +42,9 @@ def loadInput(filename="input.txt"):
 	return data
 
 #%%
-#data = createInput()
+data = createInput(n1=100, n2=200)
 #%%
-#saveInput(data)
+saveInput(data, filename="input_2.txt")
 
 #%%
 #for i in range(9):
@@ -58,14 +58,8 @@ def loadInput(filename="input.txt"):
 # print(points[p2])
 
 #%%
-data = loadInput()
-
-
-#%%
-for d in data:
-	ps = np.array(data[d])
-	m, p1, p2 = distance(ps)
-	print("Min:", m, "p1", ps[p1], "p2", ps[p2])
-
-
-#%%
+# data = loadInput()
+# for d in data:
+# 	ps = np.array(data[d])
+# 	m, p1, p2 = distance(ps)
+# 	print("Min:", m, "p1", ps[p1], "p2", ps[p2])

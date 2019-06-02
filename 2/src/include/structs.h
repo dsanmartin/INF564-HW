@@ -17,4 +17,10 @@ typedef struct node {
 	struct node* next;
 } Node;
 
+struct danger {
+	double distance;
+	Point p1;
+	Point p2;
+} typedef Danger;
+
 #endif
