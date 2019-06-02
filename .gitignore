@@ -106,3 +106,6 @@ venv.bak/
 
 # Some files
 1/*.dat
+
+2/.vscode/
+2/obj/
