@@ -4,6 +4,9 @@
 #include "structs.h"
 
 int smaller(Danger d1, Danger d2);
+int searchMin(Danger *ds, int n);
+int DACMin(Danger *ds, int l, int r);
+int binarySearch(Danger *ds, int l, int r, double min);
 void swap(Danger *d, int i, int j);
 void bubbleSort(Danger *ds, int n);
 void selectionSort(Danger *ds, int n);

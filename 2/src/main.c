@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
 		Point *p = flight->data.points; // Flights' location
 		int n = flight->data.n; // Number of flights
 		int no = (n * n - n) / 2; // Number of flights (opt)
-		printf("N: %d, NO: %d\n", n, no);
+		int min_pos = 0;
 		double *M = (double *) malloc(n * n * sizeof(double)); // Distance Matrix
 		Danger *ds = (Danger *) malloc(n * n * sizeof(Danger)); // Danger structure
 		// Danger *tmp = (Danger *) malloc(n * n * sizeof(Danger)); // Danger temp structure
@@ -39,52 +39,34 @@ int main(int argc, char *argv[]) {
 		printf("Time: %lf\n", ((double) (end - start)) / CLOCKS_PER_SEC);
 
 		/* Using sorting algorithm */
-		printf("Sorting algorithm:\n");
+		printf("\nSearch algorithm:\n");
 
-		printf("Selection Sort\n"); 
+		printf("\nLinear search\n"); 
 		start = clock();
 		warningFlights(ds, p, n); // Compute distances
-		selectionSort(ds, n * n);
+		//min_pos = searchMin(ds, n * n);
+		// int l = 0, r = n*n;
+		// int mid = l + (r - l ) / 2;
+		min_pos = DACMin(ds, 0, n * n - 1);
+		printf("min pos: %d\n", min_pos);
 		end = clock();
-		printf("Min: %lf\n", ds[0].distance);
-		showWarningFlights(ds[0].p1, ds[0].p2);
+		printf("Min: %lf\n", ds[min_pos].distance);
+		showWarningFlights(ds[min_pos].p1, ds[min_pos].p2);
 		printf("Time: %lf\n", ((double) (end - start)) / CLOCKS_PER_SEC);
 
-		printf("Selection Sort OPT\n"); 
+		printf("\nLinear OPT\n"); 
 		start = clock();
 		warningFlightsOPT(dso, p, n); // Compute distances
-		selectionSort(dso, no);
+		//min_pos = searchMin(dso, no);
+		// l = 0, r = no;
+		// mid = l + (r - l ) / 2;
+		min_pos = DACMin(dso, 0, no - 1);
+		printf("min pos: %d\n", min_pos);
 		end = clock();
-		printf("Min: %lf\n", dso[0].distance);
-		showWarningFlights(dso[0].p1, dso[0].p2);
+		printf("Min: %lf\n", dso[min_pos].distance);
+		showWarningFlights(dso[min_pos].p1, dso[min_pos].p2);
 		printf("Time: %lf\n", ((double) (end - start)) / CLOCKS_PER_SEC);
 
-		printf("Bubble Sort\n");
-		start = clock();
-		warningFlights(ds, p, n); // Compute distances
-		bubbleSort(ds, n * n);
-		end = clock();
-		printf("Min: %lf\n", ds[0].distance);
-		showWarningFlights(ds[0].p1, ds[0].p2);
-		printf("Time: %lf\n", ((double) (end - start)) / CLOCKS_PER_SEC);
-
-		printf("Bubble Sort OPT\n");
-		start = clock();
-		warningFlightsOPT(dso, p, n); // Compute distances
-		bubbleSort(dso, no);
-		end = clock();
-		printf("Min: %lf\n", dso[0].distance);
-		showWarningFlights(dso[0].p1, dso[0].p2);
-		printf("Time: %lf\n", ((double) (end - start)) / CLOCKS_PER_SEC);
-
-		// printf("Merge Sort\n");
-		// start = clock();
-		// warningFlights(ds, p, n); // Compute distances
-		// mergeSort(ds, tmp, 0, n * n);
-		// end = clock();
-		// printf("Min: %lf, p1: (%lf, %lf), p2: (%lf, %lf)\n", ds[0].distance, ds[0].p1.x, ds[0].p1.y, ds[0].p2.x, ds[0].p2.y);
-		// printf("Time: %lf\n", ((double) (end - start)) / CLOCKS_PER_SEC);
-		
 		flight = flight->next; // Next flights at same altitude
 
 		// Free

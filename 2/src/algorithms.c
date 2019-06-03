@@ -6,6 +6,84 @@ int smaller(Danger d1, Danger d2) {
 	return d1.distance < d2.distance;
 }
 
+int searchMin(Danger *ds, int n) {
+	int pos = 0;
+	double min = ds[pos].distance;
+	for (int i = 1; i < n; i++)
+		if (ds[i].distance < min) {
+			min = ds[i].distance;
+			pos = i;
+		}
+	return pos;
+}
+
+int DACMin(Danger *ds, int l, int r) {
+	if (l == r)
+		return l;
+	else {
+		int mid = l + (r - l) / 2;
+		int l_min = DACMin(ds, l, mid);
+		int r_min = DACMin(ds, mid+1, r);
+		if (ds[l_min].distance < ds[r_min].distance)
+			return l;
+		else 
+			return r;
+	}
+	// int mid = l + (r - l ) / 2;
+
+	// if (mid <= 0) {
+	// 	return mid;
+	// } else {
+	// 	int l_min = DACMin(ds, l, mid - 1);
+	// 	int r_min = DACMin(ds, mid, r);
+	// 	if (ds[l_min].distance < ds[r_min].distance)
+	// 		return l_min;
+	// 	else
+	// 		return r_min;
+	// }
+}
+
+/*
+int binaryMin(Danger *ds, int l, int r, double min) {
+	int mid = l + (r - l ) / 2;
+	//double min = ds[mid].distance;
+	int res;
+
+	if (mid == 0)
+		res = mid;
+
+	int l_min = binaryMin(ds, l, mid - 1, min);
+	int r_min = binaryMin(ds, mid, r, min);
+
+	if (ds[l_min].distance < min)
+		res = l_min;
+	else
+		res = r_min;
+	return res;
+	
+	// //int pos = 0; // Min position
+	// if (r >= l) { 
+	// 	int mid = l + (r - l) / 2; 
+
+	// 	if (ds[mid].distance == min) 
+  //     return mid;
+
+	// 	// If element is smaller than mid, then 
+	// 	// it can only be present in left subarray 
+	// 	if (ds[mid].distance > min) 
+	// 			return binarySearch(ds, l, mid - 1, min); 
+
+	// 	// Else the element can only be present 
+	// 	// in right subarray 
+	// 	return binarySearch(ds, mid + 1, r, min); 
+  // } 
+  
+	// // We reach here when element is not 
+	// // present in array 
+	// //return 0; 
+}
+*/
+
 void swap(Danger *d, int i, int j) {
 	Danger temp = d[i];
 	d[i] = d[j];
