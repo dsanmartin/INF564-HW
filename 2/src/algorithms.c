@@ -1,93 +1,65 @@
 #include <stdio.h>
 #include <math.h>
 #include "include/algorithms.h"
+#include "include/files.h"
+
+/* Compute Euclidean distance */
+double euclidean(Point p1, Point p2) {
+	return sqrt((p2.x - p1.x) * (p2.x - p1.x) + (p2.y - p1.y) * (p2.y - p1.y));
+}
+
+double min(double x, double y) { 
+  return (x < y) ? x : y; 
+}
+
+Danger minD(Danger d1, Danger d2) {
+	return (d1.distance < d2.distance) ? d1 : d2;
+}
 
 int smaller(Danger d1, Danger d2) {
 	return d1.distance < d2.distance;
 }
 
-int searchMin(Danger *ds, int n) {
-	int pos = 0;
-	double min = ds[pos].distance;
-	for (int i = 1; i < n; i++)
-		if (ds[i].distance < min) {
-			min = ds[i].distance;
-			pos = i;
-		}
-	return pos;
+int smallX(Point p1, Point p2) {
+	return p1.x < p2.x;
 }
 
-int DACMin(Danger *ds, int l, int r) {
-	if (l == r)
-		return l;
-	else {
-		int mid = l + (r - l) / 2;
-		int l_min = DACMin(ds, l, mid);
-		int r_min = DACMin(ds, mid+1, r);
-		if (ds[l_min].distance < ds[r_min].distance)
-			return l;
-		else 
-			return r;
-	}
-	// int mid = l + (r - l ) / 2;
-
-	// if (mid <= 0) {
-	// 	return mid;
-	// } else {
-	// 	int l_min = DACMin(ds, l, mid - 1);
-	// 	int r_min = DACMin(ds, mid, r);
-	// 	if (ds[l_min].distance < ds[r_min].distance)
-	// 		return l_min;
-	// 	else
-	// 		return r_min;
-	// }
+int smallY(Point p1, Point p2) {
+	return p1.y < p2.y;
 }
 
-/*
-int binaryMin(Danger *ds, int l, int r, double min) {
-	int mid = l + (r - l ) / 2;
-	//double min = ds[mid].distance;
-	int res;
-
-	if (mid == 0)
-		res = mid;
-
-	int l_min = binaryMin(ds, l, mid - 1, min);
-	int r_min = binaryMin(ds, mid, r, min);
-
-	if (ds[l_min].distance < min)
-		res = l_min;
-	else
-		res = r_min;
-	return res;
-	
-	// //int pos = 0; // Min position
-	// if (r >= l) { 
-	// 	int mid = l + (r - l) / 2; 
-
-	// 	if (ds[mid].distance == min) 
-  //     return mid;
-
-	// 	// If element is smaller than mid, then 
-	// 	// it can only be present in left subarray 
-	// 	if (ds[mid].distance > min) 
-	// 			return binarySearch(ds, l, mid - 1, min); 
-
-	// 	// Else the element can only be present 
-	// 	// in right subarray 
-	// 	return binarySearch(ds, mid + 1, r, min); 
-  // } 
-  
-	// // We reach here when element is not 
-	// // present in array 
-	// //return 0; 
+int lessThan(int x, int y) {
+	return x < y;
 }
-*/
 
-void swap(Danger *d, int i, int j) {
-	Danger temp = d[i];
-	d[i] = d[j];
-	d[j] = temp;
+void swap(Point *p, int i, int j) {
+	Point tmp = p[i];
+	p[i] = p[j];
+	p[j] = tmp;
+}
+
+int findPivot(int l, int r) {
+	return (l + r) / 2;
+}
+
+int partition(Point *p, int l, int r, int posPivot, int (*compare)(Point, Point)) {
+	do {
+		while ((*compare)(p[++l], p[posPivot]));
+		while ((l < r) && (*compare)(p[posPivot], p[--r]));
+		swap(p, l, r);
+	} while (l < r);
+	return l; // retorna la primera posición en la partición de la derecha
+}
+
+void quickSort(Point *p, int l, int r, int (*compare)(Point, Point)) {
+	int posPivot, k;
+	if (r <= l) return; // Arreglo de tamaño 0 o 1, no hace falta ordenar
+	posPivot = findPivot(l, r);
+	swap(p, posPivot, r); // intercambia pivote con el último elemento
+	k = partition(p, l-1, r, r, *compare);
+	swap(p, k, r); // intercambia pivote con primer elemento partición derecha
+	quickSort(p, l, k-1, *compare);
+	quickSort(p, k+1, r, *compare);
 }
 
 void bubbleSort(Danger *ds, int n) {
@@ -122,68 +94,237 @@ void mergeSort(Danger *A, Danger *temp, int izq, int der) {
 	}
 }
 
-double euclidean(Point p1, Point p2) {
-	return sqrt((p2.x - p1.x) * (p2.x - p1.x) + (p2.y - p1.y) * (p2.y - p1.y));
-}
-
-void distances(Point *p, int n) {
+double bruteForce(Point *p, int n) {
+	double min = INFINITY, d;
+	int i_min, j_min; // To save minimum positions
 	for (int i = 0; i < n; i++) {
-		for (int j = 0; j < n; j++) {
-			printf("(%lf %lf) (%lf %lf) \n", p[i].x, p[i].y, p[j].x, p[j].y);
-			printf("%lf\n", euclidean(p[i], p[j]));
-		}
-	}
-}
-
-void distanceMatrix(Point *p, double *M, int n) {
-	for (int i = 0; i < n; i++) {
-		for (int j = 0; j < n; j++) {
-			M[j * n + i] = euclidean(p[i], p[j]);
-			if (i == j) M[j * n + i] = INFINITY;
-		}
-	}
-}
-
-void min(Point *p, double *M, int n) {
-	int p1 = 0, p2 = 0;
-	double min = INFINITY;
-	for (int i = 0; i < n; i++) {
-		for (int j = 0; j < n; j++) {
-			if (M[j * n + i] < min) {
-				min = M[j * n + i];
-				p1 = i;
-				p2 = j;
+		for (int j = i + 1; j < n; j++) {
+			d = euclidean(p[i], p[j]);
+			if (d < min) {
+				min = d;
+				i_min = i;
+				j_min = j;
 			}
 		}
 	}
-	printf("Min: %lf, p1: (%lf, %lf), p2: (%lf, %lf)\n", min, p[p1].x, p[p1].y, p[p2].x, p[p2].y);
+	//printf("Min: %f\n", min);
+	//showPoints(p[i_min], p[j_min]);
+	return min;
 }
 
-/* Compute distance between planes. n^2 elements */
-void warningFlights(Danger *flights, Point *p, int n) {
+Danger bruteForceD(Point *p, int n) {
+	double min = INFINITY, d;
+	int i_min, j_min; // To save minimum positions
+	Danger dn;
 	for (int i = 0; i < n; i++) {
-		for (int j = 0; j < n; j++) {
-			flights[j * n + i].distance = euclidean(p[i], p[j]);
-			flights[j * n + i].p1 = p[i];
-			flights[j * n + i].p2 = p[j];
-			if (i == j) {
-				flights[j * n + i].distance = INFINITY;
-				flights[j * n + i].p1 = p[i];
-				flights[j * n + i].p2 = p[j];
-			} 
+		for (int j = i + 1; j < n; j++) {
+			d = euclidean(p[i], p[j]);
+			if (d < min) {
+				min = d;
+				i_min = i;
+				j_min = j;
+			}
 		}
 	}
+	dn.distance = min;
+	dn.p1 = p[i_min];
+	dn.p2 = p[j_min];
+	return dn;
 }
 
-/* Compute distance between planes, without repeated information. (n^2 - n)/2 elements */
-void warningFlightsOPT(Danger *flights, Point *p, int n) {
-	int k = 0;
-	for (int i = 1; i < n; i++) {
-		for (int j = 0; j < i; j++) {
-			flights[k].distance = euclidean(p[i], p[j]);
-			flights[k].p1 = p[i];
-			flights[k].p2 = p[j];
-			k++;
+/* Divide and conquer */
+double stripClosest(Point *p, int n, float d) { 
+	double min = d;  // Initialize the minimum distance as d 
+
+	quickSort(p, 0, n - 1, smallY);  
+
+	// Pick all points one by one and try the next points till the difference 
+	// between y coordinates is smaller than d. 
+	// This is a proven fact that this loop runs at most 6 times 
+	for (int i = 0; i < n; ++i) 
+		for (int j = i+1; j < n && (p[j].y - p[i].y) < min; ++j) 
+			if (euclidean(p[i], p[j]) < min) 
+				min = euclidean(p[i], p[j]); 
+
+	return min; 
+}
+
+// A recursive function to find the smallest distance. The array P contains 
+// all points sorted according to x coordinate 
+double closestUtil(Point *p, int n)  { 
+	// If there are 2 or 3 points, then use brute force 
+	if (n <= 3) 
+		return bruteForce(p, n); 
+
+	// Find the middle point 
+	int mid = n/2; 
+	//printf("mid: %d\n", mid);
+	Point midPoint = p[mid]; 
+
+	// Consider the vertical line passing through the middle point 
+	// calculate the smallest distance dl on left of middle point and 
+	// dr on right side 
+	
+	double dl = closestUtil(p, mid); 
+	double dr = closestUtil(p + mid, n-mid); 
+
+	// Find the smaller of two distances 
+	double d = min(dl, dr); 
+
+	// Build an array strip[] that contains points close (closer than d) 
+	// to the line passing through the middle point 
+	Point *strip = (Point *) malloc(n * sizeof(Point));//strip[n]; 
+	int j = 0; 
+	for (int i = 0; i < n; i++) 
+		if (fabs(p[i].x - midPoint.x) < d) 
+			strip[j] = p[i], j++; 
+
+	// Find the closest points in strip.  Return the minimum of d and closest 
+	// distance is strip[] 
+	return min(d, stripClosest(strip, j, d)); 
+} 
+  
+// The main functin that finds the smallest distance 
+// This method mainly uses closestUtil() 
+double closest(Point *p, int n)  { 
+    quickSort(p, 0, n - 1, smallX);
+    // Use recursive function closestUtil() to find the smallest distance 
+    return closestUtil(p, n); 
+}
+
+Danger stripClosestD(Point *p, int n, Danger d) { 
+	double min = d.distance;  // Initialize the minimum distance as d 
+	Danger dg;
+	dg.distance = min;
+	dg.p1 = d.p1;
+	dg.p2 = d.p2;
+
+	quickSort(p, 0, n - 1, smallY);  
+
+	// Pick all points one by one and try the next points till the difference 
+	// between y coordinates is smaller than d. 
+	// This is a proven fact that this loop runs at most 6 times 
+	for (int i = 0; i < n; ++i) {
+		for (int j = i+1; j < n && (p[j].y - p[i].y) < min; ++j) {
+			if (euclidean(p[i], p[j]) < min) {
+				dg.distance = euclidean(p[i], p[j]); 
+				dg.p1 = p[i];
+				dg.p2 = p[j];
+			}
 		}
 	}
+	return dg; 
 }
+
+// A recursive function to find the smallest distance. The array P contains 
+// all points sorted according to x coordinate 
+Danger closestUtilD(Point *p, int n)  { 
+	Danger dg, dl, dr, ds;
+	// If there are 2 or 3 points, then use brute force 
+	if (n <= 3) 
+		return bruteForceD(p, n); 
+
+	// Find the middle point 
+	int mid = n/2; 
+	Point midPoint = p[mid]; 
+
+	// Consider the vertical line passing through the middle point 
+	// calculate the smallest distance dl on left of middle point and 
+	// dr on right side 
+	
+	dl = closestUtilD(p, mid); 
+	dr = closestUtilD(p + mid, n-mid); 
+
+	// Find the smaller of two distances 
+	Danger d = minD(dl, dr); 
+
+	// Build an array strip[] that contains points close (closer than d) 
+	// to the line passing through the middle point 
+	Point *strip = (Point *) malloc(n * sizeof(Point));//strip[n]; 
+	int j = 0; 
+	for (int i = 0; i < n; i++) 
+		if (fabs(p[i].x - midPoint.x) < d.distance) 
+			strip[j] = p[i], j++; 
+
+	return minD(d, stripClosestD(strip, j, d));
+} 
+  
+// The main functin that finds the smallest distance 
+// This method mainly uses closestUtil() 
+Danger closestD(Point *p, int n)  { 
+    quickSort(p, 0, n - 1, smallX);
+    // Use recursive function closestUtil() to find the smallest distance 
+    return closestUtilD(p, n); 
+}
+
+
+void insertionSort(int *A, int n) {
+	for (int i = 1; i < n; i++)
+		for (int j = i; (j > 0) && (lessThan(A[j], A[j-1])); j--)
+			swap(A, j, j-1);
+}
+
+
+
+
+// void distances(Point *p, int n) {
+// 	for (int i = 0; i < n; i++) {
+// 		for (int j = 0; j < n; j++) {
+// 			printf("(%lf %lf) (%lf %lf) \n", p[i].x, p[i].y, p[j].x, p[j].y);
+// 			printf("%lf\n", euclidean(p[i], p[j]));
+// 		}
+// 	}
+// }
+
+// void distanceMatrix(Point *p, double *M, int n) {
+// 	for (int i = 0; i < n; i++) {
+// 		for (int j = 0; j < n; j++) {
+// 			M[j * n + i] = euclidean(p[i], p[j]);
+// 			if (i == j) M[j * n + i] = INFINITY;
+// 		}
+// 	}
+// }
+
+// void min(Point *p, double *M, int n) {
+// 	int p1 = 0, p2 = 0;
+// 	double min = INFINITY;
+// 	for (int i = 0; i < n; i++) {
+// 		for (int j = 0; j < n; j++) {
+// 			if (M[j * n + i] < min) {
+// 				min = M[j * n + i];
+// 				p1 = i;
+// 				p2 = j;
+// 			}
+// 		}
+// 	}
+// 	printf("Min: %lf, p1: (%lf, %lf), p2: (%lf, %lf)\n", min, p[p1].x, p[p1].y, p[p2].x, p[p2].y);
+// }
+
+// /* Compute distance between planes. n^2 elements */
+// void warningFlights(Danger *flights, Point *p, int n) {
+// 	for (int i = 0; i < n; i++) {
+// 		for (int j = 0; j < n; j++) {
+// 			flights[j * n + i].distance = euclidean(p[i], p[j]);
+// 			flights[j * n + i].p1 = p[i];
+// 			flights[j * n + i].p2 = p[j];
+// 			if (i == j) {
+// 				flights[j * n + i].distance = INFINITY;
+// 				flights[j * n + i].p1 = p[i];
+// 				flights[j * n + i].p2 = p[j];
+// 			} 
+// 		}
+// 	}
+// }
+
+// /* Compute distance between planes, without repeated information. (n^2 - n)/2 elements */
+// void warningFlightsOPT(Danger *flights, Point *p, int n) {
+// 	int k = 0;
+// 	for (int i = 1; i < n; i++) {
+// 		for (int j = 0; j < i; j++) {
+// 			flights[k].distance = euclidean(p[i], p[j]);
+// 			flights[k].p1 = p[i];
+// 			flights[k].p2 = p[j];
+// 			k++;
+// 		}
+// 	}
+// }

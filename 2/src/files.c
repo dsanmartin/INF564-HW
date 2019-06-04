@@ -23,7 +23,7 @@ void readInput(Node **head) {
 	}
 }
 
-void showWarningFlights(Point p1, Point p2) {
+void showPoints(Point p1, Point p2) {
 	if (p1.x < p2.x) {
 		printf("%lf %lf\n%lf %lf\n", p1.x, p1.y, p2.x, p2.y);
 	} else if (p1.x > p2.x) {
@@ -35,7 +35,7 @@ void showWarningFlights(Point p1, Point p2) {
 			printf("%lf %lf\n%lf %lf\n", p2.x, p2.y, p1.x, p1.y);
 		}
 	}
-	printf("\n");
+	//printf("\n");
 }
 
 void showDanger(Danger *ds, int n) {
