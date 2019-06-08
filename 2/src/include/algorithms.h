@@ -10,6 +10,7 @@ int findPivot(int l, int r);
 double stripClosest(Point *p, int n, float d);
 double bruteForce(Point *p, int n);
 Danger bruteForceD(Point *p, int n);
+Danger prop(Point *p, int n);
 int DACMin(Danger *ds, int l, int r);
 int binarySearch(Danger *ds, int l, int r, double min);
 void swap(Point *p, int i, int j);

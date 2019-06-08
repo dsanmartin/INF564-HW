@@ -40,6 +40,15 @@ int main(int argc, char *argv[]) {
 		printf("MIN: %lf\n", dg.distance);
 		showPoints(dg.p1, dg.p2);
 		printf("Time: %lf\n", ((double) (end - start)) / CLOCKS_PER_SEC);
+
+		start = clock();
+		dg = prop(p, n);
+		//double min_c = closest(p, n);
+		end = clock();
+		//printf("MIN: %lf\n", min_c);
+		printf("MIN: %lf\n", dg.distance);
+		showPoints(dg.p1, dg.p2);
+		printf("Time: %lf\n", ((double) (end - start)) / CLOCKS_PER_SEC);
 		
 		flight = flight->next; // Next flights at same altitude
 

@@ -94,6 +94,24 @@ void mergeSort(Danger *A, Danger *temp, int izq, int der) {
 	}
 }
 
+Danger linearMin(Point *p, int n) {
+	Danger dg;
+	int i_min = 1;
+	double min = INFINITY, dist;
+	for (int i=1; i < n; i++) {
+		dist = euclidean(p[i], p[i-1]);
+		if (dist < min) {
+			min = dist;
+			i_min = i;
+		}
+	}
+
+	dg.distance = min;
+	dg.p1 = p[i_min-1];
+	dg.p2 = p[i_min];
+	return dg;
+}
+
 double bruteForce(Point *p, int n) {
 	double min = INFINITY, d;
 	int i_min, j_min; // To save minimum positions
@@ -265,7 +283,11 @@ void insertionSort(int *A, int n) {
 }
 
 
-
+Danger prop(Point *p, int n) {
+	quickSort(p, 0, n - 1, smallX);
+	quickSort(p, 0, n - 1, smallY);
+	return linearMin(p, n);
+}
 
 // void distances(Point *p, int n) {
 // 	for (int i = 0; i < n; i++) {

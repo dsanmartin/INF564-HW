@@ -37,8 +37,3 @@ void showPoints(Point p1, Point p2) {
 	}
 	//printf("\n");
 }
-
-void showDanger(Danger *ds, int n) {
-	for (int i=0; i < n; i++)
-		printf("%lf (%lf, %lf) (%lf, %lf)\n", ds[i].distance, ds[i].p1.x, ds[i].p1.y, ds[i].p2.x, ds[i].p2.y);
-}
