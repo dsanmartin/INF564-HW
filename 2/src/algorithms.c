@@ -83,6 +83,7 @@ Danger bruteForce(Point *p, int n) {
 	dn.distance = min;
 	dn.p1 = p[i_min];
 	dn.p2 = p[j_min];
+	
 	return dn;
 }
 
@@ -152,22 +153,20 @@ Danger closestD(Point *p, int n)  {
 }
 
 Danger divide(Point *Px, Point *Py, int n) {
-	Danger d, d_l, d_r; // Structure to save closest pair
 
-	/* If there is only one point */
+	/* If there is 3 or less points, compute by brute force */
 	if (n <= 3)
 		return bruteForce(Px, n); 
 		
 	/* Compute midpoint */
 	int mid = n / 2;
-	//Point mid_point = Py[mid];
 
 	/* Recursively search closest point in each division */
-	d_l = divide(Px, Py, mid);
-	d_r = divide(Px + mid, Py + mid, n - mid);
+	Danger d_l = divide(Px, Py, mid);
+	Danger d_r = divide(Px + mid, Py + mid, n - mid);
 
-	/* Compare which is the closest pair of some division */
-	d = (d_l.distance < d_r.distance) ? d_l : d_r;
+	/* Compare which is the closest pair of the divisions */
+	Danger d = (d_l.distance < d_r.distance) ? d_l : d_r;
 
 	/* Search points bewtween division with smaller distance than min distance computed above */
 	Point *strip = (Point *) malloc(n * sizeof(Point));
@@ -177,20 +176,22 @@ Danger divide(Point *Px, Point *Py, int n) {
 		// 	strip[k] = Py[i], k++; 
 		if (fabs(Px[i].x - Px[mid].x) < d.distance) 
 			strip[k] = Px[i], k++;
-	
-	/* Sort strip points according to y coordinate */
-	//quickSort(strip, 0, k - 1, smallY);  
+		// if (fabs(Py[i].x - Px[mid].x) < d.distance)// && euclidean(Py[i], Px[mid]) != 0 )
+		// 	strip[k] = Py[i], k++; 
 
 	// Pick all points one by one and try the next points till the difference 
 	// between y coordinates is smaller than d. 
 	// This is a proven fact that this loop runs at most 6 times
 	double dist;
+	// Danger ds;
+	// ds.distance = INFINITY, ds.p1 = Px[0], ds.p2 = Py[1];
 	for (int i = 0; i < k; ++i) {
 		//for (int j = i+1; j < k && (strip[j].y - strip[i].y) * (strip[j].y - strip[i].y) < d.distance * d.distance; ++j) {
 		//for (int j = i+1; j < k && fabs(strip[j].y - strip[i].y) < d.distance; ++j) {
 		for (int j = i + 1; j < k && j <= 15; j++){ 
 			dist = euclidean(strip[i], strip[j]);
 			if (dist < d.distance) {
+				//printf("Min CP: %lf\n", dist);
 				d.distance = dist;
 				d.p1 = strip[i];
 				d.p2 = strip[j];
@@ -199,6 +200,14 @@ Danger divide(Point *Px, Point *Py, int n) {
 	}
 
 	free(strip);
+
+	//d = (ds.distance < d.distance) ? ds : d;
+	// if (ds.distance < d.distance)
+	// 	return ds;
+	// else if (d_l.distance < d_r.distance)
+	// 	return d_l;
+	// else
+	// 	return d_r;
 
 	return d;
 }

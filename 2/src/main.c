@@ -39,6 +39,16 @@ int main(int argc, char **argv) {
 		
 		//printf("MIN: %lf\n", dg.distance);
 		showPoints(dg.p1, dg.p2); // Show closest points
+
+		// for (int i = 0; i < n; i++) {
+		// 	printf("%lf %lf\n", p[i].x, p[i].y);
+		// }
+
+		// printf("\n");
+		// quickSort(p, 0, n-1, smallY);
+		// for (int i = 0; i < n; i++) {
+		// 	printf("%lf %lf\n", p[i].x, p[i].y);
+		// }
 		
 		flight = flight->next; // Next flights at same altitude
 
