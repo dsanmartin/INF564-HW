@@ -28,15 +28,14 @@ int main(int argc, char **argv) {
 		Danger dg; // Structure to save closest pair
 
 		/* Compute closest pair of points with chosen algorithm */
-		//dg = alg ? closestPair(p, n) : bruteForce(p, n);
-		//dg = closestPair(p, n);
-		if (alg == 0) 
-			dg = bruteForce(p, n);
-		else if (alg == 1)
-			dg = closestPair(p, n);
-		else
-			dg = closestD(p, n);
+		dg = alg ? closestPair(p, n) : bruteForce(p, n);
 
+		// if (alg == 0) 
+		// 	dg = bruteForce(p, n);
+		// else if (alg == 1)
+		// 	dg = closestPair(p, n);
+		// else
+		// 	dg = closestD(p, n);
 		
 		//printf("MIN: %lf\n", dg.distance);
 		showPoints(dg.p1, dg.p2); // Show closest points

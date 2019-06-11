@@ -6,8 +6,10 @@ OBJ_DIR = ./obj
 MKDIR  = mkdir -p
 RM		 = rm -rf 
 
-SRC = $(wildcard $(SRC_DIR)/*.c)
+SRC = $(filter-out $(SRC_DIR)/insertion.c, $(wildcard $(SRC_DIR)/*.c))
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+
+CC = gcc
 
 CFLAGS += -Wall
 LDFLAGS += #-Llib

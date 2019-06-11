@@ -66,12 +66,6 @@ void quickSort(Point *p, int l, int r, int (*compare)(Point, Point)) {
 	quickSort(p, k+1, r, *compare);
 }
 
-void insertionSort(int *A, int n) {
-	for (int i = 1; i < n; i++)
-		for (int j = i; (j > 0) && (lessThan(A[j], A[j-1])); j--)
-			swap(A, j, j-1);
-}
-
 Danger bruteForce(Point *p, int n) {
 	double min = INFINITY, d;
 	int i_min, j_min; // To save minimum positions
@@ -166,24 +160,23 @@ Danger divide(Point *Px, Point *Py, int n) {
 		
 	/* Compute midpoint */
 	int mid = n / 2;
-	Point mid_point = Py[mid];
+	//Point mid_point = Py[mid];
 
 	/* Recursively search closest point in each division */
 	d_l = divide(Px, Py, mid);
 	d_r = divide(Px + mid, Py + mid, n - mid);
 
-	/* Compare which is the closes pair on point of each division */
-	if (d_l.distance < d_r.distance) 
-		d = d_l;
-	else
-		d = d_r;
+	/* Compare which is the closest pair of some division */
+	d = (d_l.distance < d_r.distance) ? d_l : d_r;
 
 	/* Search points bewtween division with smaller distance than min distance computed above */
 	Point *strip = (Point *) malloc(n * sizeof(Point));
 	int k = 0; 
 	for (int i = 0; i < n; i++) 
-		if (fabs(Py[i].x - mid_point.x) < d.distance) 
-			strip[k] = Py[i], k++; 
+		// if (fabs(Py[i].x - Py[mid].x) < d.distance)
+		// 	strip[k] = Py[i], k++; 
+		if (fabs(Px[i].x - Px[mid].x) < d.distance) 
+			strip[k] = Px[i], k++;
 	
 	/* Sort strip points according to y coordinate */
 	//quickSort(strip, 0, k - 1, smallY);  
@@ -193,7 +186,9 @@ Danger divide(Point *Px, Point *Py, int n) {
 	// This is a proven fact that this loop runs at most 6 times
 	double dist;
 	for (int i = 0; i < k; ++i) {
-		for (int j = i+1; j < k && (strip[j].y - strip[i].y) * (strip[j].y - strip[i].y) < d.distance * d.distance; ++j) {
+		//for (int j = i+1; j < k && (strip[j].y - strip[i].y) * (strip[j].y - strip[i].y) < d.distance * d.distance; ++j) {
+		//for (int j = i+1; j < k && fabs(strip[j].y - strip[i].y) < d.distance; ++j) {
+		for (int j = i + 1; j < k && j != i; j++){ 
 			dist = euclidean(strip[i], strip[j]);
 			if (dist < d.distance) {
 				d.distance = dist;
@@ -202,6 +197,8 @@ Danger divide(Point *Px, Point *Py, int n) {
 			}
 		}
 	}
+
+	free(strip);
 
 	return d;
 }
