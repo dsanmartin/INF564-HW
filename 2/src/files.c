@@ -6,7 +6,7 @@
 /* Read input from stdin. Fill a list where each element has the flights at equal altitude */
 void readInput(Node **head) {
 	int id = 0, n = 0;
-	printf("Reading input...\n");
+	//printf("Reading input...\n");
 	while (scanf("%d\n", &n) != EOF) { // Read n 
 		/* Create flights structure and fill it */
 		Flights f;
@@ -35,5 +35,5 @@ void showPoints(Point p1, Point p2) {
 			printf("%lf %lf\n%lf %lf\n", p2.x, p2.y, p1.x, p1.y);
 		}
 	}
-	//printf("\n");
+	printf("\n");
 }

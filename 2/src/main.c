@@ -6,12 +6,17 @@
 #include "include/list.h"
 #include "include/algorithms.h"
 
-int main(int argc, char *argv[]) {
+int main(int argc, char **argv) {
+	int alg = 1;
+	if (argc < 2) {
+		printf("CHOOSE ALGORITHM:\n0) BRUTE FORCE 1) CLOSEST PAIR\n\n");
+		return EXIT_FAILURE;
+	} else {
+		alg = atoi(argv[1]);
+	}
+
 	/* Use a list to keep flights data at same altitude */
 	Node *head = NULL;
-
-	/* To compute time for each approach */
-	clock_t start, end;
 
 	readInput(&head); // Read stdin and fill list
 	
@@ -20,40 +25,25 @@ int main(int argc, char *argv[]) {
 	while (flight != NULL) {
 		Point *p = flight->data.points; // Flights' location
 		int n = flight->data.n; // Number of flights
-		Danger dg;
-		//int n_d = (n * n - n) / 2; // Number of distances to compute
+		Danger dg; // Structure to save closest pair
 
-		printf("Altitude %d\n", flight->data.id);
+		/* Compute closest pair of points with chosen algorithm */
+		//dg = alg ? closestPair(p, n) : bruteForce(p, n);
+		//dg = closestPair(p, n);
+		if (alg == 0) 
+			dg = bruteForce(p, n);
+		else if (alg == 1)
+			dg = closestPair(p, n);
+		else
+			dg = closestD(p, n);
+
 		
-		start = clock();
-		dg = bruteForceD(p, n);
-		end = clock();
-		printf("MIN: %lf\n", dg.distance);
-		showPoints(dg.p1, dg.p2);
-		printf("Time: %lf\n", ((double) (end - start)) / CLOCKS_PER_SEC);
-
-		start = clock();
-		dg = closestD(p, n);
-		//double min_c = closest(p, n);
-		end = clock();
-		//printf("MIN: %lf\n", min_c);
-		printf("MIN: %lf\n", dg.distance);
-		showPoints(dg.p1, dg.p2);
-		printf("Time: %lf\n", ((double) (end - start)) / CLOCKS_PER_SEC);
-
-		// start = clock();
-		// dg = prop(p, n);
-		// end = clock();
-		// printf("MIN: %lf\n", dg.distance);
-		// showPoints(dg.p1, dg.p2);
-		// printf("Time: %lf\n", ((double) (end - start)) / CLOCKS_PER_SEC);
+		//printf("MIN: %lf\n", dg.distance);
+		showPoints(dg.p1, dg.p2); // Show closest points
 		
 		flight = flight->next; // Next flights at same altitude
 
-		// Free
-		free(p);
-
-		printf("\n");
+		free(p); // Free airplanes positions
 	}
 
 	/* Free list */

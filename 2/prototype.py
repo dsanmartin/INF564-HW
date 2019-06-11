@@ -102,7 +102,9 @@ def closestPair(p):
   p = p[p[:,0].argsort()] # 
   return divide(p)
 #%%
-#data = createInput(n1=100, n2=200)
+data = createInput(heights=1, n1=10, n2=11)
+#%%
+saveInput(data, 'data/benchmark/input_1_10.txt')
 #%%
 #saveInput(data, filename="input_2.txt")
 
@@ -154,3 +156,13 @@ print("Min:", m, "p1", p1, "p2", p2)
 ps = np.array(data[0])
 %timeit m, p1, p2 = distance(ps)
 print("Min:", m, "p1", p1, "p2", p2)
+
+#%%
+
+p1 = np.array([196.163183, 932.941575])
+p2 = np.array([412.917522, 722.814010])
+
+p11 = np.array([23.970695, 822.995784])
+p22 = np.array([196.163183, 932.941575])
+
+print(np.linalg.norm(p1-p2), np.linalg.norm(p11-p22))
