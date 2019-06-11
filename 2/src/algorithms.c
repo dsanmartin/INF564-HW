@@ -188,7 +188,7 @@ Danger divide(Point *Px, Point *Py, int n) {
 	for (int i = 0; i < k; ++i) {
 		//for (int j = i+1; j < k && (strip[j].y - strip[i].y) * (strip[j].y - strip[i].y) < d.distance * d.distance; ++j) {
 		//for (int j = i+1; j < k && fabs(strip[j].y - strip[i].y) < d.distance; ++j) {
-		for (int j = i + 1; j < k && j != i; j++){ 
+		for (int j = i + 1; j < k && j <= 15; j++){ 
 			dist = euclidean(strip[i], strip[j]);
 			if (dist < d.distance) {
 				d.distance = dist;
