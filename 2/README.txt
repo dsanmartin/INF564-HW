@@ -2,7 +2,7 @@ Tarea 2 - Daniel San Martín
 
 1. COMPILACION:
 ------------------
-Realizar make dentro de la carpeta.
+Realizar make adentro de la carpeta.
 
 2. EJECUCION:
 ------------------

@@ -102,9 +102,9 @@ def closestPair(p):
   p = p[p[:,0].argsort()] # 
   return divide(p)
 #%%
-data = createInput(heights=1, n1=10, n2=11)
+data = createInput(heights=10, n1=10, n2=501)
 #%%
-saveInput(data, 'data/benchmark/input_1_10.txt')
+saveInput(data, 'data/test/input_4.txt')
 #%%
 #saveInput(data, filename="input_2.txt")
 
@@ -143,26 +143,69 @@ for d in data:
   
 #%%
 ps = np.array(data[0])
-#%timeit 
 m, p1, p2 = bruteForce(ps)
 print("Min:", m, "p1", p1, "p2", p2)
 
 #%%
 ps = np.array(data[0])
-%timeit m, p1, p2 = closestPair(ps)
+m, p1, p2 = closestPair(ps)
 print("Min:", m, "p1", p1, "p2", p2)
 
 #%%
 ps = np.array(data[0])
-%timeit m, p1, p2 = distance(ps)
+m, p1, p2 = distance(ps)
 print("Min:", m, "p1", p1, "p2", p2)
 
+#%% INSERTION
+def insertion(A):
+  for i in range(len(A)):
+    x = A[i]
+    j = i
+    while j > 0 and A[j-1] > x:
+      A[j] = A[j-1]
+      j = j - 1
+    A[j] = x
+    
+def insertion2(A):
+  n = len(A)
+  #B = [None] * n
+  i = 1
+  while A[i-1] < A[i] and i < n-1:
+    #B[i] = A[i]
+    i += 1
+  for j in range(i, n):
+    x = A[j]
+    k = j
+    while k > 0 and A[k-1] > x:
+      A[k] = A[k-1]
+      k = k - 1
+    A[k] = x
+  
+def insertion3(A):
+  n = len(A)
+  i = 0
+  for i in range(len(A)):
+    while A[i-1] < A[i] and i < n-1:
+      i += 1
+    x = A[i]
+    j = i
+    while j > 0 and A[j-1] > x:
+      A[j] = A[j-1]
+      j = j - 1
+    A[j] = x
+    
 #%%
+a = [8,9,10,11,12,3,4,5,18,19,20,16,17,13,14,15,16]
+b = [8,11,15,16,3,4,5,18,20,21,25,26,27,7,10,14]
+c = [8,11,15,16,19,5,4,3,1,27,23,21,20,18,17,13,14,22,24]
+#%%
+%timeit insertion(a)
+%timeit insertion(b)
+%timeit insertion(c)
 
-p1 = np.array([196.163183, 932.941575])
-p2 = np.array([412.917522, 722.814010])
-
-p11 = np.array([23.970695, 822.995784])
-p22 = np.array([196.163183, 932.941575])
-
-print(np.linalg.norm(p1-p2), np.linalg.norm(p11-p22))
+#%%
+%timeit insertion3(a)
+#%%
+%timeit insertion3(b)
+#%%
+%timeit insertion3(c)

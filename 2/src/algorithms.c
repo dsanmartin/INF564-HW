@@ -161,7 +161,7 @@ Danger divideAndConquer2(Point *Px, Point *Py, int n) {
 	// This is a proven fact that this loop runs at most 6 times
 	double dist;
 	for (int i = 0; i < k; ++i) {
-		for (int j = i+1; j < k && fabs(strip[j].y - strip[i].y) < d.distance; ++j) {
+		for (int j = i+1; j < k && (strip[j].y - strip[i].y) < d.distance; ++j) {
 			dist = euclidean(strip[i], strip[j]);
 			if (dist < d.distance) {
 				d.distance = dist;
