@@ -10,24 +10,29 @@ double euclidean(Point p1, Point p2) {
 	return sqrt((p2.x - p1.x) * (p2.x - p1.x) + (p2.y - p1.y) * (p2.y - p1.y));
 }
 
+/* Comparison function for sort algorithm (x-coordinate) */
 int smallX(Point p1, Point p2) {
 	return p1.x < p2.x;
 }
 
+/* Comparison function for sort algorithm (y-coordinate) */
 int smallY(Point p1, Point p2) {
 	return p1.y < p2.y;
 }
 
+/* Swap function */
 void swap(Point *p, int i, int j) {
 	Point tmp = p[i];
 	p[i] = p[j];
 	p[j] = tmp;
 }
 
+/* Find pivot for QuickSort */
 int findPivot(int l, int r) {
 	return (l + r) / 2;
 }
 
+/* Partition function for QuickSort */
 int partition(Point *p, int l, int r, int posPivot, int (*compare)(Point, Point)) {
 	do {
 		while ((*compare)(p[++l], p[posPivot]));
@@ -37,13 +42,14 @@ int partition(Point *p, int l, int r, int posPivot, int (*compare)(Point, Point)
 	return l; // retorna la primera posición en la partición de la derecha
 }
 
+/* Quick Sort taken from class notes */
 void quickSort(Point *p, int l, int r, int (*compare)(Point, Point)) {
 	int posPivot, k;
-	if (r <= l) return; // Arreglo de tamaño 0 o 1, no hace falta ordenar
+	if (r <= l) return;
 	posPivot = findPivot(l, r);
-	swap(p, posPivot, r); // intercambia pivote con el último elemento
+	swap(p, posPivot, r);
 	k = partition(p, l-1, r, r, *compare);
-	swap(p, k, r); // intercambia pivote con primer elemento partición derecha
+	swap(p, k, r); 
 	quickSort(p, l, k-1, *compare);
 	quickSort(p, k+1, r, *compare);
 }
@@ -52,6 +58,7 @@ Danger bruteForce(Point *p, int n) {
 	double min = INFINITY, d;
 	int i_min, j_min; // To save minimum positions
 	Danger dn;
+	/* Search min distance using distance matrix */
 	for (int i = 0; i < n; i++) {
 		for (int j = i + 1; j < n; j++) {
 			d = euclidean(p[i], p[j]);
@@ -171,13 +178,14 @@ Danger divideAndConquer2(Point *Px, Point *Py, int n) {
 		}
 	}
 
+	free(Py_l);
+	free(Py_r);
 	free(strip);
 
 	return d;
 }
 
 Danger closestPair(Point *p, int n) {
-	//Danger d;
 	Point *Px, *Py;
 	Px = (Point *) malloc(n * sizeof(Point));
 	Py = (Point *) malloc(n * sizeof(Point));
