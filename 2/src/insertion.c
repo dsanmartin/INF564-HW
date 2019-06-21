@@ -99,10 +99,17 @@ void createInput(int *A, int n) {
 	}
 }
 
+/* Load data for benchmark */
+void loadData(int *A, int n) {
+	for (int i = 0; i < n; i++) {
+		scanf("%d", &A[i]);
+	}
+}
+
 /* Show Array */
 void showArray(int *A, int n) {
 	for (int i = 0; i < n; i++) {
-		printf("%d ", A[i]);
+		printf("%d\n", A[i]);
 	}
 	printf("\n");
 }
@@ -121,9 +128,10 @@ int main(int argc, char **argv) {
 	}
 
 	A = (int *) malloc(n * sizeof(int));
-	createInput(A, n); // Fill random array
+	//createInput(A, n); // Fill random array
+	loadData(A, n);
 
-	showArray(A, n);
+	//showArray(A, n);
 
 	switch (opt) {
 		case 0:
@@ -149,7 +157,7 @@ int main(int argc, char **argv) {
 			break;
 	}
 
-	showArray(A, n);
+	//showArray(A, n);
 
 	return 0;
 }

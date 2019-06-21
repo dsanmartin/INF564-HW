@@ -156,6 +156,8 @@ ps = np.array(data[0])
 m, p1, p2 = distance(ps)
 print("Min:", m, "p1", p1, "p2", p2)
 
+#%%PROBLEM 2
+
 #%% INSERTION
 def insertion(A):
   for i in range(len(A)):
@@ -209,3 +211,20 @@ c = [8,11,15,16,19,5,4,3,1,27,23,21,20,18,17,13,14,22,24]
 %timeit insertion3(b)
 #%%
 %timeit insertion3(c)
+
+#%%
+import random
+import numpy as np
+N = 1000000
+# Import data
+data = list(range(N))
+blocksize = N // 10
+
+# Create blocks
+blocks = [data[i:i+blocksize] for i in range(0,len(data),blocksize)]
+# shuffle the blocks
+random.shuffle(blocks)
+# concatenate the shuffled blocks
+data[:] = [b for bs in blocks for b in bs]
+
+np.savetxt(str(N) + '.txt', data, fmt='%d')

@@ -39,7 +39,7 @@ int partition(Point *p, int l, int r, int posPivot, int (*compare)(Point, Point)
 		while ((l < r) && (*compare)(p[posPivot], p[--r]));
 		swap(p, l, r);
 	} while (l < r);
-	return l; // retorna la primera posición en la partición de la derecha
+	return l; 
 }
 
 /* Quick Sort taken from class notes */
