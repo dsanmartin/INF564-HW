@@ -2,71 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-
-void showArray(int *A, int n);
-
-void insertElement(int *A, int pos, int l, int r) {
-	int size = r - l + 1;
-	int new = A[r];
-	// int k = 0;
-	int *B = (int *) malloc(size * sizeof(int));
-	memcpy(B, A, size * sizeof(int));
-	// while (k < pos) {
-	// 	A[k] = B[k];
-	// 	k++;
-	// }
-	// while (k <= l) {
-	// 	A[k+1] = B[k];
-	// 	k++;
-	// }
-	// for (int c = r - 1; c >= r - 1; c--)
-  //     A[c+1] = A[c];
- 
-  // A[pos] = new;
-	// if (pos == 0) memcpy(A+1, B, size);
-	// else {
-	// 	for (int i=l; i <= r && i != l + pos; i++) {
-	// 		A[i] = B[i-l];
-	// 	}
-	// }
-	//A[pos] = new;
-	// for (int j = r; j > pos; j--)
-	// 	A[j] = A[j-1];
-	// A[pos] = new;
-	memcpy(A+pos+1, B+pos, (r - pos)*sizeof(int));
-	A[pos] = new;
-}
-
-// int binarySearch(int *A, int l, int r, int x) { 
-// 	if (r >= l) { 
-// 		int mid = l + (r - l) / 2; 
-
-// 		// If the element is present at the middle 
-// 		// itself 
-// 		if (A[mid] == x) 
-// 			return mid; 
-
-// 		// If element is smaller than mid, then 
-// 		// it can only be present in left subarray 
-// 		if (A[mid] > x) {
-// 			int i = binarySearch(A, l, mid - 1, x); 
-// 			return (i == -1) ? l: i;
-// 		} else {
-// 			int i = binarySearch(A, mid + 1, r, x);
-// 			return (i == -1) ? r: i;
-// 		}
-
-// 		// Else the element can only be present 
-// 		// in right subarray 
-		
-// 	} 
-
-// 	// We reach here when element is not 
-// 	// present in array 
-// 	return -1; 
-// }
-
-
+#include "libsort.c"
 
 /* Professor Arroyuelo's class notes implementation */
 void swap(int *A, int i, int j) {
@@ -152,43 +88,6 @@ void insertionSortOPT4(int *A, int n) {
 	}	 
 } 
 
-// void rebalance(int *A, int begin, int end) {
-// 	int r = end;
-// 	int w = end * 2;
-// 	while (r >= begin) {
-// 		A[w+1] = -1;
-// 		A[w] = A[r];
-// 		r = r - 1;
-// 		w = w - 2;
-// 	}
-// }
-
-// void sort(int *A, int n)
-// 	int S[n];
-// 	for (int i=0; i < n; i++) {
-// 		S[i] = -1;
-// 	}
-// 	S ← new array of n gaps
-// 	for i ← 1 to floor(log2(n) + 1)
-// 			for j ← 2^i to 2^(i+1)
-// 					ins ← binarysearch(A[j], S, 2^(i-1))
-// 					insert A[j] at S[ins]
-
-// void insertionSortOPT3(int *A, int n) { 
-// 	int i=1, tmp, pos;
-// 	//for (i = 1; i < n; i++) {
-// 	while (i < n) {
-// 		while (A[i-1] < A[i]) i++;
-// 		if (i < n) {
-// 			tmp = A[i];
-// 			pos = binarySearch(A, 0, i-1, tmp);
-// 			insertElement(A, pos, 0, i);
-// 			// showArray(A, n);
-// 			// sleep(1);
-// 		} 
-// 	}
-// }
-
 /* Utils */
 
 /* Random integer array */
@@ -224,7 +123,7 @@ int main(int argc, char **argv) {
 	A = (int *) malloc(n * sizeof(int));
 	createInput(A, n); // Fill random array
 
-	//showArray(A, n);
+	showArray(A, n);
 
 	switch (opt) {
 		case 0:
@@ -242,12 +141,15 @@ int main(int argc, char **argv) {
 		case 4:
 			insertionSortOPT4(A, n);
 			break;
+		case 5:
+			librarySort(A, n);
+			break;
 		default:
 			insertionSort(A, n);
 			break;
 	}
 
-	//showArray(A, n);
+	showArray(A, n);
 
 	return 0;
 }
