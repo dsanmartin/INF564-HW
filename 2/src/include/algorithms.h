@@ -12,5 +12,6 @@ void swap(Point *p, int i, int j);
 void quickSort(Point *p, int l, int r, int (*compare)(Point, Point));
 Danger bruteForce(Point *p, int n);
 Danger closestPair(Point *p, int n);
+Danger divideAndConquer(Point *Px, Point *Py, int n);
 
 #endif

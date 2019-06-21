@@ -75,60 +75,8 @@ Danger bruteForce(Point *p, int n) {
 	
 	return dn;
 }
-	
+
 Danger divideAndConquer(Point *Px, Point *Py, int n) {
-
-	/* If there is 3 or less points, compute by brute force */
-	if (n <= 3)
-		return bruteForce(Px, n); 
-		
-	/* Compute midpoint */
-	int mid = n / 2;
-
-	/* Recursively search closest point in each division */
-	Danger d_l = divideAndConquer(Px, Py, mid);
-	Danger d_r = divideAndConquer(Px + mid, Py + mid, n - mid);
-
-	/* Compare which is the closest pair of the divisions */
-	Danger d = (d_l.distance < d_r.distance) ? d_l : d_r;
-
-	/* Search points bewtween division with smaller distance than min distance computed above */
-	Point *strip = (Point *) malloc(n * sizeof(Point));
-	int k = 0; 
-	for (int i = 0; i < n; i++) 
-		// if (fabs(Py[i].x - Py[mid].x) < d.distance)
-		// 	strip[k] = Py[i], k++; 
-		if (fabs(Px[i].x - Px[mid].x) < d.distance) 
-			strip[k] = Px[i], k++;
-		// if (fabs(Py[i].x - Px[mid].x) < d.distance)// && euclidean(Py[i], Px[mid]) != 0 )
-		// 	strip[k] = Py[i], k++; 
-
-	// Pick all points one by one and try the next points till the difference 
-	// between y coordinates is smaller than d. 
-	// This is a proven fact that this loop runs at most 6 times
-	double dist;
-	// Danger ds;
-	// ds.distance = INFINITY, ds.p1 = Px[0], ds.p2 = Py[1];
-	for (int i = 0; i < k; ++i) {
-		//for (int j = i+1; j < k && (strip[j].y - strip[i].y) * (strip[j].y - strip[i].y) < d.distance * d.distance; ++j) {
-		//for (int j = i+1; j < k && fabs(strip[j].y - strip[i].y) < d.distance; ++j) {
-		for (int j = i + 1; j < k && j <= 15; j++){ 
-			dist = euclidean(strip[i], strip[j]);
-			if (dist < d.distance) {
-				//printf("Min CP: %lf\n", dist);
-				d.distance = dist;
-				d.p1 = strip[i];
-				d.p2 = strip[j];
-			}
-		}
-	}
-
-	free(strip);
-
-	return d;
-}
-
-Danger divideAndConquer2(Point *Px, Point *Py, int n) {
 
 	/* If there is 3 or less points, compute by brute force */
 	if (n <= 3)
@@ -150,8 +98,8 @@ Danger divideAndConquer2(Point *Px, Point *Py, int n) {
 	}
 
 	/* Recursively search closest point in each division */
-	Danger d_l = divideAndConquer2(Px, Py_l, mid);
-	Danger d_r = divideAndConquer2(Px + mid, Py_r, n - mid);
+	Danger d_l = divideAndConquer(Px, Py_l, mid);
+	Danger d_r = divideAndConquer(Px + mid, Py_r, n - mid);
 
 	/* Compare which is the closest pair of the divisions */
 	Danger d = (d_l.distance < d_r.distance) ? d_l : d_r;
@@ -178,8 +126,6 @@ Danger divideAndConquer2(Point *Px, Point *Py, int n) {
 		}
 	}
 
-	free(Py_l);
-	free(Py_r);
 	free(strip);
 
 	return d;
@@ -197,5 +143,5 @@ Danger closestPair(Point *p, int n) {
 	quickSort(Py, 0, n - 1, smallY);
 
 	/* Divide and Conquer */
-	return divideAndConquer2(Px, Py, n);
+	return divideAndConquer(Px, Py, n);
 }
