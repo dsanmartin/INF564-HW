@@ -56,7 +56,7 @@ void quickSort(Point *p, int l, int r, int (*compare)(Point, Point)) {
 
 Danger bruteForce(Point *p, int n) {
 	double min = INFINITY, d;
-	int i_min, j_min; // To save minimum positions
+	int i_min = 0, j_min = 0; // To save minimum positions
 	Danger dn;
 	/* Search min distance using distance matrix */
 	for (int i = 0; i < n; i++) {
