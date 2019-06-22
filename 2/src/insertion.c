@@ -11,6 +11,12 @@ void swap(int *A, int i, int j) {
 	A[j] = a;
 }
 
+void insertionSort(int *A, int n) {
+	for (int i = 1; i < n; i++)
+		for (int j = i; (j > 0) && (A[j-1] > A[j]); j--)
+			swap(A, j, j-1);
+}
+
 /* Binary search to find an element's position */
 int binarySearch(int *A, int a, int l, int r) { 
 	if (r <= l) 
@@ -26,12 +32,6 @@ int binarySearch(int *A, int a, int l, int r) {
 
 	return binarySearch(A, a, l, r - 1); 
 } 
-
-void insertionSort(int *A, int n) {
-	for (int i = 1; i < n; i++)
-		for (int j = i; (j > 0) && (A[j-1] > A[j]); j--)
-			swap(A, j, j-1);
-}
 
 /* Remove swap to avoid create temporary variable in each 'insertion' */
 void insertionSortOPT1(int *A, int n) { 
@@ -109,22 +109,23 @@ void loadData(int *A, int n) {
 /* Show Array */
 void showArray(int *A, int n) {
 	for (int i = 0; i < n; i++) {
-		printf("%d\n", A[i]);
+		printf("%d ", A[i]);
 	}
 	printf("\n");
 }
 
 
 int main(int argc, char **argv) {
-	int n = 0, opt = 0;
+	int n = 0, opt = 0, show = 0;
 	int *A;
 
 	if (argc < 2) {
-		printf("USE: ./insertion OPT N\nOPT: Algorithm version used.\nN: Number of array's elements.\n");
+		printf("USE: ./insertion OPT N SHOW\nOPT: Algorithm version used.\nN: Number of array's elements.\nSHOW: Show sorted array.\n");
 		return EXIT_FAILURE;
 	} else {
 		opt = atoi(argv[1]);
 		n = atoi(argv[2]);
+		show = atoi(argv[3]);
 	}
 
 	A = (int *) malloc(n * sizeof(int));
@@ -154,6 +155,8 @@ int main(int argc, char **argv) {
 			insertionSort(A, n);
 			break;
 	}
+
+	if (show) showArray(A, n);
 
 	return 0;
 }

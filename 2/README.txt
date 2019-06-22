@@ -16,9 +16,10 @@ Formato input_file segun lo detallado en el enunciado de la tarea.
 
 2.2 Problema 2
 
-./insertion OPT N < input_file
+./insertion OPT N SHOW < input_file
 * OPT: Version del algoritmo. 0 Original, n para version n, 5 Library Sort
 * N: Tamaño del arreglo a ordenar.
+* SHOW: Show sorted array.
 * input_file: ruta del archivo de entrada.
 Formato input_file:
 entero_1
