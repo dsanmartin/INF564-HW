@@ -54,9 +54,10 @@ void quickSort(Point *p, int l, int r, int (*compare)(Point, Point)) {
 	quickSort(p, k+1, r, *compare);
 }
 
+/* Brute force approach */
 Danger bruteForce(Point *p, int n) {
 	double min = INFINITY, d;
-	int i_min = 0, j_min = 0; // To save minimum positions
+	int i_min = 0, j_min = 1; // To save minimum positions
 	Danger dn;
 	/* Search min distance using distance matrix */
 	for (int i = 0; i < n; i++) {
@@ -76,6 +77,7 @@ Danger bruteForce(Point *p, int n) {
 	return dn;
 }
 
+/* Divide and conquer */
 Danger divideAndConquer(Point *Px, Point *Py, int n) {
 
 	/* If there is 3 or less points, compute by brute force */
@@ -111,9 +113,7 @@ Danger divideAndConquer(Point *Px, Point *Py, int n) {
 		if (fabs(Py[i].x - midpoint.x) < d.distance)
 			strip[k] = Py[i], k++; 
 
-	// Pick all points one by one and try the next points till the difference 
-	// between y coordinates is smaller than d. 
-	// This is a proven fact that this loop runs at most 6 times
+	/* Compare point with neighbors. Only keep the points where the difference between y-coordinate is < d */
 	double dist;
 	for (int i = 0; i < k; ++i) {
 		for (int j = i+1; j < k && (strip[j].y - strip[i].y) < d.distance; ++j) {
@@ -131,6 +131,7 @@ Danger divideAndConquer(Point *Px, Point *Py, int n) {
 	return d;
 }
 
+/* Call closest pair */
 Danger closestPair(Point *p, int n) {
 	Point *Px, *Py;
 	Px = (Point *) malloc(n * sizeof(Point));

@@ -228,3 +228,11 @@ random.shuffle(blocks)
 data[:] = [b for bs in blocks for b in bs]
 
 np.savetxt(str(N) + '.txt', data, fmt='%d')
+
+#%%
+import random
+import numpy as np
+N = 1000000
+data = list(range(N))
+random.shuffle(data)
+np.savetxt(str(N) + '.txt', data, fmt='%d')

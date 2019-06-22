@@ -76,10 +76,10 @@ void insertionSortOPT4(int *A, int n) {
 		j = i - 1; 
 		a = A[i]; 
 
-		// find location where selected sould be inseretd 
+		// Position to insert the temporal value
 		pos = binarySearch(A, a, 0, j); 
 
-		// Move all elements after location to create space 
+		// Move elements
 		while (j >= pos) { 
 			A[j+1] = A[j]; 
 			j--; 
@@ -90,7 +90,7 @@ void insertionSortOPT4(int *A, int n) {
 
 /* Utils */
 
-/* Random integer array */
+/* Random integer array  for testing */
 void createInput(int *A, int n) {
 	srand(666);
 	int lower = 0, upper = 10000;
@@ -128,10 +128,8 @@ int main(int argc, char **argv) {
 	}
 
 	A = (int *) malloc(n * sizeof(int));
-	//createInput(A, n); // Fill random array
-	loadData(A, n);
 
-	//showArray(A, n);
+	loadData(A, n);
 
 	switch (opt) {
 		case 0:
@@ -157,52 +155,5 @@ int main(int argc, char **argv) {
 			break;
 	}
 
-	//showArray(A, n);
-
 	return 0;
 }
-
-// int main(int argc, char **argv) {
-
-// 	int opt = atoi(argv[1]);
-
-// 	int t1[17] = {8, 9, 10, 11, 12, 3, 4, 5, 18, 19, 20, 16, 17, 13, 14, 15, 16};
-// 	int t2[16] = {8, 11, 15, 16, 3, 4, 5, 18, 20, 21, 25, 26, 27, 7, 10, 14};
-// 	int t3[19] = {8, 11, 15, 16, 19, 5, 4, 3, 1, 27, 23, 21, 20, 18, 17, 13, 14, 22, 24};
-
-// 	showArray(t1, 17);
-// 	// showArray(t2, 16);
-// 	// showArray(t3, 19);
-
-// 	if (opt == 0) {
-// 		insertionSort(t1, 17);
-// 		insertionSort(t2, 16);
-// 		insertionSort(t3, 19);
-// 	} else if (opt == 1) {
-// 		insertionSortOPT1(t1, 17);
-// 		insertionSortOPT1(t2, 16);
-// 		insertionSortOPT1(t3, 19);
-// 	} else if (opt == 2) {
-// 		insertionSortOPT2(t1, 17);
-// 		insertionSortOPT2(t2, 16);
-// 		insertionSortOPT2(t3, 19);
-// 	} else if (opt == 3) {
-// 		insertionSortOPT3(t1, 17);
-// 		// insertionSortOPT3(t2, 16);
-// 		// insertionSortOPT3(t3, 19);
-// 	} else {
-// 		printf("Error OPT");
-// 		return EXIT_FAILURE;
-// 	}
-
-// 	showArray(t1, 17);
-// 	// showArray(t2, 16);
-// 	// showArray(t3, 19);
-
-// 	// printf("%d\n", binarySearch(t1, 0, 16, 20));
-// 	// printf("%d\n", binarySearch(t2, 0, 15, 100));
-// 	// printf("%d\n\n", binarySearch(t3, 0, 18, 16));
-
-
-// 	return 0;
-// }
