@@ -1,4 +1,5 @@
-import breeze.linalg.{Vector, DenseVector, squaredDistance}
+import java.io.File
+import breeze.linalg.{Vector, DenseVector, squaredDistance, csvwrite}
 import org.apache.spark._
 import org.apache.log4j.{Level, Logger}
 
@@ -21,16 +22,15 @@ object SparkKMeans {
 	  bestIndex
 	}
 
-
 	def main(args: Array[String]) {
 		val sparkConf = new SparkConf().setAppName("SparkKMeans")
 		val sc = new SparkContext(sparkConf)
-		sc.setLogLevel("ERROR")
-		val lines = sc.textFile(args(0))
+		val n = 4 // Number of cores
+		val lines = sc.textFile(args(0), n - 1)
 		val data = lines.map(parseVector _).cache()
 		val k = args(1).toInt // K prototipos
 		val convergeDist = args(2).toDouble
-		val kPoints = data.takeSample(withReplacement=false, k, 50).toArray
+		val kPoints = data.takeSample(withReplacement=false, k, 666).toArray
 		var tempDist = 1.0	
 		var iter = 0
 		while (tempDist > convergeDist) {
@@ -47,6 +47,11 @@ object SparkKMeans {
 			iter += 1
 		}
 		println(s"Iterations: ${iter}")
+		println(s"Centroids:")
+		for (i <- 0 until k) {
+			println(s"${kPoints(i)}")
+		}
+		//csvwrite(new File("text.txt"), kPoints.toArray, separator = ',')
 		sc.stop()
 	}
 }
