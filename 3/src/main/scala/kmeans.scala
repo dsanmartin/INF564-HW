@@ -30,7 +30,7 @@ object SparkKMeans {
 		val data = lines.map(parseVector _).cache()
 		val k = args(1).toInt // K prototipos
 		val convergeDist = args(2).toDouble
-		val kPoints = data.takeSample(withReplacement=false, k, 666).toArray
+		val kPoints = data.takeSample(withReplacement=false, k, System.currentTimeMillis).toArray
 		var tempDist = 1.0	
 		var iter = 0
 		while (tempDist > convergeDist) {
@@ -47,10 +47,10 @@ object SparkKMeans {
 			iter += 1
 		}
 		println(s"Iterations: ${iter}")
-		println(s"Centroids:")
-		for (i <- 0 until k) {
-			println(s"${kPoints(i)}")
-		}
+		// println(s"Centroids:")
+		// for (i <- 0 until k) {
+		// 	println(s"${kPoints(i)}")
+		// }
 		//csvwrite(new File("text.txt"), kPoints.toArray, separator = ',')
 		sc.stop()
 	}
