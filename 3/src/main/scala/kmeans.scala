@@ -2,35 +2,44 @@ import java.io.File
 import breeze.linalg.{Vector, DenseVector, DenseMatrix, norm, squaredDistance, csvwrite}
 import breeze.linalg.functions.{cosineDistance}
 import org.apache.spark._
-//import org.apache.log4j.{Level, Logger}
-
 
 object SparkKMeans {
 
 	val sparkConf = new SparkConf().setAppName("SparkKMeans")
 	val sc = new SparkContext(sparkConf)
 
-	def splitVector(line: String): Vector[Double] = {
-	  DenseVector(line.split(',').map(_.toDouble))
-	}
-
+	/* 
+		Function to read dataset and create RDD
+		filename: file path
+		n: number of cores / RDD slices
+	*/
 	def parse_vector(filename: String, n: Int) = {
 		val lines = sc.textFile(filename, n - 1)
-		val data = lines.map(splitVector _).cache()
+		val data = lines.map(l => 
+			Vector(l.split(',').map(_.toDouble))
+		).cache()
 		data
 	}
 
+	/*
+		Function to compute Cosine Similarity
+		x, y: Vectors to compute similarity
+	*/
   def cosineSimilarity(x: Vector[Double], y: Vector[Double]): Double = {
-  	// (x dot y) / (norm(x) * norm(y))
   	val denom = norm(x) * norm(y)
-    val dotProduct = x.dot(y)//dot(x, y)
+    val dotProduct = x dot y
     if (denom == 0.0) {
       0.0
     } else {
       dotProduct / denom
     }
   }
-
+	
+	/* 
+		Find the closest point 
+		p: Vector. Point to evaluate
+		centers: Array of vectors. Actual centers
+	*/
 	def closestPoint(p: Vector[Double], centers: Array[Vector[Double]]): Int = {
 	  var bestIndex = 0
 	  var closest = Double.PositiveInfinity
@@ -45,13 +54,17 @@ object SparkKMeans {
 	  bestIndex
 	}
 
+	/*
+		Function to save centroids and number of iterations
+	*/
 	def saveExperiment(seed: Long, k: Int, iter: Int, kPoints: Array[Vector[Double]]) = {
 		val file = new File(s"data/output/${k}/${seed}.txt")
-		val mat = DenseMatrix.zeros[Double](k+1, 7604)
+		//val mat = DenseMatrix.zeros[Double](k+1, 7604)
+		val mat = DenseMatrix.zeros[Double](k+1, 3754)
 		mat(0, 0) = iter
 		for (i <- 0 until k) {
-			//csvwrite(file, new DenseMatrix(1, 3, kPoints(i).toArray), separator = ',')
-			mat(i+1, 0 to 7603) := kPoints(i).t//.toArray
+			//mat(i+1, 0 to 7603) := kPoints(i).t
+			mat(i+1, 0 to 3753) := kPoints(i).t
 		}
 		csvwrite(file, mat, separator = ',')
 	}
@@ -64,7 +77,7 @@ object SparkKMeans {
 		val seed = System.currentTimeMillis
 		val kPoints = data.takeSample(withReplacement=false, k, seed).toArray
 		var tempDist = 1.0	
-		var iter = 0
+		var iter = 0 // To count iterations
 		while (tempDist > convergeDist) {
 			val closest = data.map(p => (closestPoint(p, kPoints), (p, 1))) // closestPoint id_centroide | (p, 1) el 1 es para conteo
 			val pointStats = closest.reduceByKey{ case ((p1, c1), (p2, c2)) => (p1 + p2, c1 + c2) } // <c_id, [(p1, 1), (p2, 1), ...]>
@@ -78,7 +91,6 @@ object SparkKMeans {
 			}
 			for (newP <- newPoints) kPoints(newP._1) = newP._2
 			iter += 1
-			println(s"Iterations: ${iter}")
 		}
 		println(s"Iterations: ${iter}")
 
